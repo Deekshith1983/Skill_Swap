@@ -6,18 +6,22 @@ const cors = require("cors");
 
 const app = express();
 
-
-// Middleware
+// ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// ================= ROUTES =================
 const authRoutes = require("./routes/auth");
+const profileRoutes = require("./routes/profile");
+
 app.use("/auth", authRoutes);
+app.use("/profile", profileRoutes);
+
+// (optional - your teammate work)
 app.use("/sessions", require("./routes/sessions"));
 app.use("/reviews", require("./routes/reviews"));
 
-// MongoDB Connection
+// ================= DB CONNECTION =================
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("✅ MongoDB Atlas Connected Successfully");
@@ -26,12 +30,12 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log("❌ MongoDB Connection Error:", err);
   });
 
-// Test Route
+// ================= TEST ROUTE =================
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// Server Start
+// ================= SERVER =================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
