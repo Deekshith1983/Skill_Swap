@@ -13,6 +13,8 @@ app.use(express.json());
 // Routes
 const authRoutes = require("./routes/auth");
 app.use("/auth", authRoutes);
+app.use("/sessions", require("./routes/sessions"));
+app.use("/reviews", require("./routes/reviews"));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
