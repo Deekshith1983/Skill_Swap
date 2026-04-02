@@ -13,11 +13,13 @@ app.use(express.json());
 // ================= ROUTES =================
 const authRoutes = require("./routes/auth");
 const profileRoutes = require("./routes/profile");
+const matchRoutes = require("./routes/match"); // 🔥 NEW
 
 app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
+app.use("/match", matchRoutes); // 🔥 NEW
 
-// (optional - your teammate work)
+// (optional - teammate work)
 app.use("/sessions", require("./routes/sessions"));
 app.use("/reviews", require("./routes/reviews"));
 
