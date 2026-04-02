@@ -12,7 +12,14 @@ const UserSchema = new Schema({
   bio:             { type: String, maxlength: 500 },
   skillsOffered:   [{ type: String }],
   skillsNeeded:    [{ type: String }],
-  experienceLevel: { type: String, enum: ['Beginner','Intermediate','Advanced'], required: true },
+
+  // ✅ FIXED HERE
+  experienceLevel: { 
+    type: String, 
+    enum: ['Beginner','Intermediate','Advanced'], 
+    default: 'Beginner'   // 👈 not required anymore
+  },
+
   rating:          { type: Number, default: 0, min: 0, max: 5 },
   reviews:         [ReviewSchema],
   sessionHistory:  [{ type: Schema.Types.ObjectId, ref: 'Session' }],
