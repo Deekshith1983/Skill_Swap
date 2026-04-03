@@ -6,8 +6,11 @@ exports.getMySessions = async (req, res) => {
     const userId = req.user.id;
 
     const sessions = await Session.find({
-      users: userId,
-    }).populate("users", "name email rating");
+      $or: [
+        { userA: userId },
+        { userB: userId }
+      ]
+    }).populate("userA userB", "name email rating");
 
     res.json(sessions);
   } catch (err) {
@@ -19,7 +22,11 @@ exports.getMySessions = async (req, res) => {
 exports.getSessionById = async (req, res) => {
   try {
     const session = await Session.findById(req.params.id)
-      .populate("users", "name email rating");
+      .populate("userA userB", "name email rating");
+
+    if (!session) {
+      return res.status(404).json({ message: "Session not found" });
+    }
 
     res.json(session);
   } catch (err) {

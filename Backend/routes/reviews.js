@@ -4,6 +4,7 @@ const router = express.Router();
 const { addReview } = require("../controllers/reviewController");
 const auth = require("../middleware/auth");
 
-router.post("/:id/review", auth, addReview);
+// Add a review for a completed session
+router.post("/:id/add", auth, addReview);
 
 module.exports = router;
