@@ -1,13 +1,9 @@
 const express = require("express");
 const router = express.Router();
-
-const { getMatches, searchMatches } = require("../controllers/matchController");
 const authMiddleware = require("../middleware/auth");
+const { getMatches } = require("../controllers/matchController");
 
-// automatic profile-based mutual matching
+// Get complementary skill matches
 router.get("/", authMiddleware, getMatches);
-
-// search bar based matching
-router.get("/search", authMiddleware, searchMatches);
 
 module.exports = router;

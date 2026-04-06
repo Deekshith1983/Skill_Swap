@@ -1,13 +1,12 @@
 const Session = require("../Models/Session");
 const User = require("../Models/User");
 
-//  ADD REVIEW
+// POST /api/sessions/:id/review - Submit review for a session
 exports.addReview = async (req, res) => {
   try {
     const { score, feedback } = req.body;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
-    // Validate score
     if (!score || score < 1 || score > 5) {
       return res.status(400).json({ message: "Score must be between 1 and 5" });
     }
@@ -19,58 +18,54 @@ exports.addReview = async (req, res) => {
     }
 
     if (session.status !== "Completed") {
-      return res.status(400).json({
-        message: "Review allowed only after completion",
-      });
+      return res.status(400).json({ message: "Can only review completed sessions" });
     }
 
-    // Determine if user is userA or userB
-    const isUserA = userId.toString() === session.userA.toString();
-    const targetUserId = isUserA ? session.userB : session.userA;
-
-    // Check if review already exists from this user
-    const existingReview = session.ratings.find(
-      (r) => r.from.toString() === userId.toString()
-    );
-
-    if (existingReview) {
-      return res.status(400).json({ message: "You have already reviewed this session" });
+    // Check if already reviewed
+    if (session.ratings?.some(r => r.from.toString() === userId.toString())) {
+      return res.status(409).json({ message: "You have already reviewed this session" });
     }
 
-    // Save review in session
+    // Determine reviewee
+    const revieweeId = session.userA.toString() === userId.toString() ? session.userB : session.userA;
+
+    // Add rating to session
+    session.ratings = session.ratings || [];
     session.ratings.push({
       from: userId,
-      // session: session._id,  // optional - already has parent
-      score,
-      feedback,
+      score: parseInt(score),
+      feedback: feedback || ''
     });
 
     await session.save();
 
-    // Save review in user
-    const targetUser = await User.findById(targetUserId);
-
-    if (!targetUser) {
-      return res.status(404).json({ message: "Target user not found" });
+    // Update reviewee's reviews
+    const reviewee = await User.findById(revieweeId);
+    if (!reviewee) {
+      return res.status(404).json({ message: "Reviewee not found" });
     }
 
-    targetUser.reviews.push({
+    reviewee.reviews.push({
       reviewer: userId,
-      reviewee: targetUserId,
       session: session._id,
-      score,
-      feedback,
+      score: parseInt(score),
+      feedback: feedback || ''
     });
 
-    // Recalculate average rating
-    const totalScore = targetUser.reviews.reduce((sum, r) => sum + r.score, 0);
-    targetUser.rating = totalScore / targetUser.reviews.length;
+    // Recalculate rating
+    if (reviewee.reviews.length > 0) {
+      const avgRating = reviewee.reviews.reduce((sum, r) => sum + r.score, 0) / reviewee.reviews.length;
+      reviewee.rating = Math.round(avgRating * 10) / 10;
+    }
 
-    await targetUser.save();
+    await reviewee.save();
 
-    res.json({ message: "Review added successfully", review: targetUser.reviews[targetUser.reviews.length - 1] });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(200).json({
+      message: "Review submitted successfully",
+      session: await session.populate('userA userB ratings.from', '-password')
+    });
+  } catch (error) {
+    console.error("ADD REVIEW ERROR:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };

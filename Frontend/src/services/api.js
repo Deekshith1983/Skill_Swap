@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"
 });
 
-// ✅ JWT TOKEN AUTO ATTACH
+// Request interceptor - attach JWT token
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -13,4 +13,17 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+// Response interceptor - handle auth errors
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default API;
+

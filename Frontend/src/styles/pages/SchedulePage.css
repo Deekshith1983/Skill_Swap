@@ -1,0 +1,474 @@
+/* SchedulePage Specific Styles */
+
+.schedule-page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+.schedule-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.schedule-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Tabs */
+.schedule-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: var(--spacing-lg);
+  overflow-x: auto;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.schedule-tab {
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schedule-tab:hover {
+  color: var(--text-primary);
+}
+
+.schedule-tab.schedule-tab-active {
+  color: var(--primary-blue);
+}
+
+.schedule-tab.schedule-tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary-blue);
+}
+
+.tab-badge {
+  background: var(--primary-blue);
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Sessions List */
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.session-card {
+  background: var(--bg-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-fast);
+}
+
+.session-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-color);
+}
+
+/* Session Card Structure */
+.session-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.partner-info {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+  flex: 1;
+}
+
+.partner-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary-blue);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.partner-details h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.partner-details .skill-info {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin: 0;
+}
+
+.session-status {
+  background: #E8F5E9;
+  color: #2E7D32;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Session Details */
+.session-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md) 0;
+}
+
+.detail-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Session Actions */
+.session-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-accept,
+.btn-start,
+.btn-complete,
+.btn-review,
+.btn-cancel,
+.btn-reschedule,
+.btn-mark-ongoing {
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-mark-ongoing {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.btn-mark-ongoing:hover {
+  background: #054FA5;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-reschedule {
+  background: #F3F6F8;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-reschedule:hover {
+  background: var(--border-light);
+  border-color: var(--primary-blue);
+}
+
+.btn-cancel {
+  background: #FFE8E8;
+  color: #C32F2F;
+  border: 1px solid #FFCDD2;
+}
+
+.btn-cancel:hover {
+  background: #FFCDD2;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-accept {
+  background: var(--primary-green);
+  color: white;
+}
+
+.btn-accept:hover {
+  background: #037D1B;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-start {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-start:hover {
+  background: #1976D2;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-complete {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.btn-complete:hover {
+  background: #054FA5;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-review {
+  background: #FF9800;
+  color: white;
+}
+
+.btn-review:hover {
+  background: #F57C00;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-review.btn-submitted {
+  background: #05A024;
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+.btn-review.btn-submitted:hover {
+  background: #05A024;
+  box-shadow: var(--shadow-sm);
+}
+
+
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--bg-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal h2 {
+  margin-top: 0;
+  color: var(--text-primary);
+}
+
+.modal p {
+  color: var(--text-secondary);
+}
+
+.modal .form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.modal .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-textarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  min-height: 100px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  transition: all var(--transition-fast);
+}
+
+.modal-textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-submit,
+.btn-close {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all var(--transition-fast);
+}
+
+.btn-submit {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.btn-submit:hover {
+  background: #054FA5;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-close {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-close:hover {
+  background: var(--text-tertiary);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .schedule-page-container {
+    padding: var(--spacing-lg);
+  }
+
+  .schedule-header h1 {
+    font-size: 22px;
+  }
+
+  .schedule-tabs {
+    gap: 4px;
+  }
+
+  .schedule-tab {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .session-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .session-details {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .session-actions {
+    flex-wrap: wrap;
+  }
+
+  .btn-mark-ongoing,
+  .btn-reschedule,
+  .btn-cancel {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .modal {
+    width: 95%;
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .schedule-page-container {
+    padding: var(--spacing-md);
+  }
+
+  .schedule-header h1 {
+    font-size: 20px;
+  }
+
+  .session-card {
+    padding: var(--spacing-md);
+  }
+
+  .session-header {
+    gap: var(--spacing-sm);
+  }
+
+  .session-details {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .session-actions {
+    flex-direction: column;
+  }
+
+  .btn-mark-ongoing,
+  .btn-reschedule,
+  .btn-cancel {
+    width: 100%;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn-submit,
+  .btn-close {
+    width: 100%;
+  }
+}
+

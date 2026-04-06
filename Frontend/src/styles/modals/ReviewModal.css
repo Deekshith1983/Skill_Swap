@@ -1,0 +1,232 @@
+/* Review Modal Styles */
+
+.review-modal {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 480px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+
+.review-modal h2 {
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Session Info */
+.review-session-info {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.review-session-info .avatar {
+  flex-shrink: 0;
+}
+
+.session-partner {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.session-skills {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.session-time {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* Review Sections */
+.review-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.review-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Star Rating */
+.star-rating {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #DDD;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+  line-height: 1;
+}
+
+.star:hover,
+.star.active {
+  color: #FF9800;
+  transform: scale(1.2);
+}
+
+.rating-text {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Textarea */
+.review-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  resize: vertical;
+  transition: all var(--transition-fast);
+}
+
+.review-textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
+}
+
+.review-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Error Message */
+.error-message {
+  padding: 8px 12px;
+  background: #FFEBEE;
+  color: #C32F2F;
+  border: 1px solid #FFCDD2;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Actions */
+.review-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.btn-submit-review {
+  padding: 12px 16px;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-submit-review:hover:not(:disabled) {
+  background: #054FA5;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-submit-review:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-skip-review {
+  padding: 12px 16px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: underline;
+}
+
+.btn-skip-review:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+/* Success State */
+.review-success {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.success-icon {
+  font-size: 64px;
+  color: var(--primary-green);
+  margin-bottom: var(--spacing-lg);
+  animation: successPulse 0.6s ease-out;
+}
+
+.review-success h2 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--primary-green);
+  font-size: 24px;
+}
+
+.review-success p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .review-modal {
+    width: 95%;
+    padding: var(--spacing-lg);
+  }
+
+  .star-rating {
+    gap: 8px;
+  }
+
+  .star {
+    font-size: 28px;
+  }
+}

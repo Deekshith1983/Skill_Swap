@@ -1,17 +1,7 @@
-import axios from "axios";
+import API from "./api";
 
-const API = axios.create({
-  baseURL: "http://localhost:5000",
-});
-
-// attach token automatically
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = token;
-  return config;
-});
-
-export const loginUser = (data) => API.post("/auth/login", data);
 export const registerUser = (data) => API.post("/auth/register", data);
+export const loginUser = (data) => API.post("/auth/login", data);
+export const getCurrentUser = () => API.get("/auth/me");
 
 export default API;

@@ -1,25 +1,24 @@
 const express = require("express");
 const router = express.Router();
+const authMiddleware = require("../middleware/auth");
+const { sendRequest, getIncomingRequests, getSentRequests, acceptRequest, rejectRequest, getAcceptedRequest } = require("../controllers/requestController");
 
-const {
-  sendRequest,
-  acceptRequest,
-  rejectRequest,
-  getIncomingRequests
-} = require("../controllers/requestController");
+// Send connection request
+router.post("/send", authMiddleware, sendRequest);
 
-const auth = require("../middleware/auth");
+// Get incoming requests
+router.get("/incoming", authMiddleware, getIncomingRequests);
 
-// send request
-router.post("/send", auth, sendRequest);
+// Get sent requests
+router.get("/sent", authMiddleware, getSentRequests);
 
-// accept
-router.put("/:id/accept", auth, acceptRequest);
+// Get accepted request with specific user
+router.get("/accepted/:userId", authMiddleware, getAcceptedRequest);
 
-// reject
-router.put("/:id/reject", auth, rejectRequest);
+// Accept request
+router.put("/:id/accept", authMiddleware, acceptRequest);
 
-// incoming
-router.get("/incoming", auth, getIncomingRequests);
+// Reject request
+router.put("/:id/reject", authMiddleware, rejectRequest);
 
 module.exports = router;
