@@ -3,22 +3,6 @@
 A full-stack MERN application designed for college students to exchange skills without monetary transactions.
 
 ---
-
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [How It Works](#how-it-works)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation--setup)
-- [Running the Application](#running-the-application)
-- [Usage Guide](#usage-guide)
-- [Project Status](#project-status)
-
----
-
 ## 🎯 Overview
 
 **Skill Swap** is a peer-to-peer skill exchange platform where college students can teach and learn from each other for free. Instead of paying for tutoring or courses, users can offer their skills and request to learn skills from peers.
