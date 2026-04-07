@@ -11,7 +11,7 @@ exports.createSession = async (req, res) => {
       return res.status(404).json({ message: "Session not found" });
     }
 
-    if (session.status !== 'Pending' && session.status !== 'Scheduled') {
+    if (session.status !== 'Pending' && session.status !== 'Accepted' && session.status !== 'Scheduled') {
       return res.status(400).json({ message: "Cannot schedule this session" });
     }
 

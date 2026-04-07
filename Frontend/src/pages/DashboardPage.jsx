@@ -54,7 +54,7 @@ export default function DashboardPage({ onLogout }) {
       {/* Greeting Section */}
       <div className="greeting-section">
         <div>
-          <h1>Good morning, {user?.name?.split(" ")[0]}</h1>
+          <h1>Welcome, {user?.name?.split(" ")[0]}</h1>
           <p className="greeting-meta">{today} • {pendingReqs} pending request{pendingReqs !== 1 ? "s" : ""}</p>
         </div>
         <button onClick={() => navigate("/search")} className="btn-find-matches">
