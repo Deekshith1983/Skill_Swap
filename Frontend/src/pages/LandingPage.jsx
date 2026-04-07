@@ -19,7 +19,6 @@ export default function LandingPage() {
           </p>
           <div className="hero-buttons">
             <button onClick={() => navigate("/register")} className="btn-primary">Get started free</button>
-            <button className="btn-secondary">See how it works</button>
           </div>
         </div>
       </section>
