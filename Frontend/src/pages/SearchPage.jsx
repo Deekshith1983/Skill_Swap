@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { searchUsers, getSkillSuggestions } from "../services/searchService";
 import { getComplementaryMatches } from "../services/matchService";
 import { sendRequest } from "../services/requestService";
+import { getMyProfile } from "../services/profileService";
 import Avatar from "../components/common/Avatar";
 import Spinner from "../components/common/Spinner";
 import { Link } from "react-router-dom";
@@ -14,28 +15,54 @@ export default function SearchPage() {
   const [suggestions, setSuggestions] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [disabledButtons, setDisabledButtons] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
   const [filter, setFilter] = useState({
     experienceLevel: "",
     minRating: 0,
     sort: "matchScore"
   });
 
-  // Load complementary matches on page render
+  // Load complementary matches on page render + fetch current user
   useEffect(() => {
-    loadComplementaryMatches();
+    loadInitialData();
   }, []);
 
-  const loadComplementaryMatches = async () => {
+  const loadInitialData = async () => {
     try {
       setLoading(true);
+      // Fetch current user's skills
+      const userRes = await getMyProfile();
+      setCurrentUser(userRes.data?.user || userRes.data);
+      
+      // Load complementary matches
       const res = await getComplementaryMatches();
       setResults(res.data?.users || []);
       setHasSearched(false);
     } catch (error) {
-      console.error("Failed to load matches:", error);
+      console.error("Failed to load data:", error);
       setResults([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Helper function to get the match description
+  const getMatchDescription = (user) => {
+    const searchSkill = query.toLowerCase().trim();
+    const userNeeds = user.skillsNeeded || [];
+    const currentUserOffers = currentUser?.skillsOffered || [];
+    
+    // Find if current user has any skill that this user needs
+    const matchingSkill = currentUserOffers.find(skill => 
+      userNeeds.some(need => need.toLowerCase().includes(skill.toLowerCase()))
+    );
+    
+    if (hasSearched && searchSkill) {
+      // Search mode: Show searched skill ↔ matching skill or nothing
+      return `${searchSkill} ↔ ${matchingSkill || "nothing"}`;
+    } else {
+      // Complementary mode: Show their offers ↔ their needs
+      return `${user.skillsOffered?.[0] || "skill"} ↔ ${user.skillsNeeded?.[0] || "skill"}`;
     }
   };
 
@@ -53,11 +80,35 @@ export default function SearchPage() {
     setLoading(true);
     setHasSearched(true);
     try {
-      const res = await searchUsers(query, {
+      console.log("Search params:", { q: query, experienceLevel: filter.experienceLevel, minRating: filter.minRating });
+      const res = await searchUsers({
+        q: query,
         experienceLevel: filter.experienceLevel || undefined,
         minRating: filter.minRating || undefined
       });
+      
+      console.log("Raw API response:", res.data);
       let users = res.data.users || [];
+      console.log("Users from API:", users);
+      console.log("Number of users:", users.length);
+      
+      // FRONTEND FILTER: Only show users who have the searched skill in skillsOffered
+      // This removes complementary/mutual matches from search results
+      const searchQueryLower = query.toLowerCase().trim();
+      console.log("Filtering for:", searchQueryLower);
+      
+      users = users.filter(user => {
+        const hasSkill = user.skillsOffered && 
+          user.skillsOffered.some(skill => 
+            skill.toLowerCase().includes(searchQueryLower)
+          );
+        console.log(`User ${user.name}: skillsOffered=${user.skillsOffered}, hasSkill=${hasSkill}`);
+        return hasSkill;
+      });
+      
+      console.log("After filtering:", users);
+      
+      // Apply sorting after filtering
       if (filter.sort === "rating") {
         users.sort((a, b) => b.rating - a.rating);
       } else if (filter.sort === "recent") {
@@ -89,31 +140,38 @@ export default function SearchPage() {
     setQuery("");
     setSuggestions([]);
     setHasSearched(false);
-    loadComplementaryMatches();
+    loadInitialData();
   };
 
-  const handleConnect = async (userId, userSkillOffered, userSkillNeeded) => {
+  const handleConnect = async (userId, user) => {
     try {
-      // Disable the button immediately
       setDisabledButtons(prev => ({
         ...prev,
         [userId]: true
       }));
 
-      // Send request with the partner's skills
-      // What partner offers = what you need
-      // What partner needs = what you offer
+      // Calculate the correct skill pairing
+      const searchSkill = hasSearched ? query : user.skillsOffered?.[0] || "Skill";
+      const currentUserOffers = currentUser?.skillsOffered || [];
+      const userNeeds = user.skillsNeeded || [];
+      
+      // Find if current user has any skill that this user needs
+      const matchingSkill = currentUserOffers.find(skill => 
+        userNeeds.some(need => need.toLowerCase().includes(skill.toLowerCase()))
+      ) || "";
+      
+      // Send request
+      // skillA = what they offer (searched skill or their first skill)
+      // skillB = what we offer (matching skill or empty)
       await sendRequest(
         userId,
-        userSkillNeeded || "Skill",      // You're offering what they need
-        userSkillOffered || "Skill"      // You're requesting what they offer
+        searchSkill,           // What they offer / what you want to learn
+        matchingSkill || "General"  // What you offer / what you can teach them
       );
 
-      // Optional: Show success message
       alert("Connection request sent!");
     } catch (error) {
       console.error("Failed to send request:", error);
-      // Re-enable button on error
       setDisabledButtons(prev => ({
         ...prev,
         [userId]: false
@@ -198,7 +256,7 @@ export default function SearchPage() {
         <div className="results-info">
           <p>
             {hasSearched
-              ? `Showing ${results.length} results for "${query}"`
+              ? `Found ${results.length} user${results.length !== 1 ? 's' : ''} offering "${query}"`
               : `Showing ${results.length} complementary matches for your profile · sorted by skill overlap`
             }
           </p>
@@ -214,10 +272,10 @@ export default function SearchPage() {
           <div className="no-results-box">
             <div className="no-results-icon">🔍</div>
             <h2 className="no-results-title">
-              Skill "<strong>{query}</strong>" not found
+              No users found for "<strong>{query}</strong>"
             </h2>
             <p className="no-results-subtitle">
-              No tutors found teaching this skill. Try searching for something else or explore suggestions below.
+              Nobody is currently offering to teach this skill. Try searching for something else or explore suggestions below.
             </p>
 
             {/* Suggestions Section */}
@@ -315,12 +373,12 @@ export default function SearchPage() {
                 </div>
 
                 <p className="match-description">
-                  Match your {user.skillsOffered?.slice(0, 2).join(" + ")} ↔ his {user.skillsNeeded?.slice(0, 2).join(" + ")}
+                  Match your {getMatchDescription(user)}
                 </p>
 
                 <div className="card-actions">
                   <button 
-                    onClick={() => handleConnect(user._id, user.skillsOffered?.[0], user.skillsNeeded?.[0])}
+                    onClick={() => handleConnect(user._id, user)}
                     disabled={disabledButtons[user._id]}
                     className="btn-connect"
                   >
